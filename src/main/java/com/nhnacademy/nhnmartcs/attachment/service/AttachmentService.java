@@ -1,4 +1,4 @@
 package com.nhnacademy.nhnmartcs.attachment.service;
 
-public class AttachmentServiceImpl {
+public interface AttachmentService {
 }
