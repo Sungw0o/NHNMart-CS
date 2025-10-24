@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>오류 발생 - NHN Mart 고객센터</title>
+    <!-- 분리된 CSS 파일 연결 -->
+    <link rel="stylesheet" th:href="@{/css/error.css}">
+</head>
+<body>
+<div class="error-container">
+    <h1>죄송합니다, 오류가 발생했습니다.</h1>
+    <p>요청을 처리하는 중 예상치 못한 문제가 발생했습니다. 잠시 후 다시 시도해 주십시오.</p>
+
+    <div th:if="${exception}" th:object="${exception}">
+        <p><strong>오류 메시지:</strong> <span th:text="*{message}">오류 메시지 없음</span></p>
+        <p><small>오류 유형: <span th:text="*{getClass().getName()}"></span></small></p>
+    </div>
+
+    <a th:href="@{/cs/login}" class="home-link">로그인 페이지로 돌아가기</a>
+</div>
+</body>
+</html>
+
