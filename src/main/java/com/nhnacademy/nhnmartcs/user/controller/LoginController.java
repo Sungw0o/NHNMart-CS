@@ -8,22 +8,26 @@ import com.nhnacademy.nhnmartcs.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
+    @GetMapping("/cs/login")
     public String loginForm(){
+
         return "login";
     }
 
-    @PostMapping("/login")
+
+    @PostMapping("/cs/login")
     public String doLogin(LoginRequest loginRequest, HttpServletRequest request){
         User loginUser = userService.doLogin(
                 loginRequest.getLoginId(),
@@ -34,21 +38,22 @@ public class LoginController {
         session.setAttribute("loginUser", loginUser);
 
         if (loginUser instanceof Customer) {
-            return "redirect:/board";
+            return "board";
         } else if (loginUser instanceof CSAdmin) {
-            return "redirect:/admin";
+            return "admin";
         }
 
         return "redirect:/";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/cs/logout")
     public String doLogout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         }
-        return "redirect:/login";
+
+        return "redirect:/cs/login";
     }
 
 }
