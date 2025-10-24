@@ -42,7 +42,6 @@ public class LoginController {
         } else if (loginUser instanceof CSAdmin) {
             return "admin";
         }
-
         return "redirect:/";
     }
 

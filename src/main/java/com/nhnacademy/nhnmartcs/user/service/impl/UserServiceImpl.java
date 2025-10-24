@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     public User doLogin(String loginId, String password){
 
         User user = userRepository.findByLoginId(loginId)
-                .orElseThrow(()-> new LoginFailedException("알 수 없는 오류."));
+                .orElseThrow(()-> new LoginFailedException("아이디가 존재하지 않습니다."));
 
         if (!user.getPassword().equals(password)) {
             throw new LoginFailedException("비밀번호가 일치하지 않습니다.");
