@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문의 상세 내역 - NHN Mart 고객센터</title>
+    <link rel="stylesheet" th:href="@{/css/inquiry-detail.css}">
+</head>
+<body>
+<div class="container" th:object="${inquiry}">
+    <h1>문의 상세 내역</h1>
+
+    <div class="inquiry-info">
+        <dl>
+            <dt>제목:</dt>
+            <dd th:text="*{title}">문의 제목</dd>
+
+            <dt>분류:</dt>
+            <dd th:text="*{category}">분류</dd>
+
+            <dt>작성일시:</dt>
+            <dd th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}">작성일시</dd>
+
+            <dt>답변 상태:</dt>
+            <dd>
+                <span th:if="*{answered}" class="status-answered">답변 완료</span>
+                <span th:unless="*{answered}" class="status-pending">답변 대기</span>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="inquiry-content">
+        <h2>문의 내용</h2>
+        <p th:text="*{content}">문의 본문 내용입니다.</p>
+    </div>
+
+    <!-- TODO: 첨부파일 목록 표시 -->
+    <!--
+    <div class="attachments" th:if="*{!#lists.isEmpty(attachments)}">
+        <h3>첨부파일</h3>
+        <ul>
+            <li th:each="file : *{attachments}">
+                <a th:href="@{/cs/attachments/{id}(id=${file.id})}" th:text="${file.originalFilename}"></a>
+            </li>
+        </ul>
+    </div>
+    -->
+
+    <!-- 답변 내용 (답변이 있을 경우에만 표시) -->
+    <div th:if="*{answered}" class="answer-section">
+        <h2>답변 내용</h2>
+        <div class="answer-info">
+            <dl>
+                <dt>답변 일시:</dt>
+                <dd th:text="${#temporals.format(inquiry.answerCreatedAt, 'yyyy-MM-dd HH:mm')}">답변일시</dd>
+
+                <dt>답변 담당자:</dt>
+                <dd th:text="*{answerAdminName}">담당자 이름</dd>
+            </dl>
+        </div>
+        <div class="answer-content">
+            <p th:text="*{answerContent}">답변 내용입니다.</p>
+        </div>
+    </div>
+
+    <a th:href="@{/cs}" class="back-link">← 목록으로 돌아가기</a>
+
+</div>
+</body>
+</html>
+

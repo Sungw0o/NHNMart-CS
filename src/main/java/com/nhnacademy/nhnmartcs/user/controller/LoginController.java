@@ -38,7 +38,7 @@ public class LoginController {
         session.setAttribute("loginUser", loginUser);
 
         if (loginUser instanceof Customer) {
-            return "board";
+            return "inquiry-form";
         } else if (loginUser instanceof CSAdmin) {
             return "admin";
         }
