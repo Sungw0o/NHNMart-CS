@@ -29,7 +29,7 @@ class LoginCheckInterceptorTest {
     static class TestController {
         @GetMapping("/cs")
         public String protectedPage() {
-            return "board";
+            return "inquiry-form";
         }
     }
 
