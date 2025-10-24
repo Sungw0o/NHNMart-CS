@@ -13,6 +13,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Authenticate a user by login ID and password.
+     *
+     * @param loginId the user's login identifier
+     * @param password the plaintext password to verify
+     * @return the authenticated User
+     * @throws LoginFailedException if no user exists for the given loginId or if the password does not match
+     */
     @Override
     public User doLogin(String loginId, String password){
 

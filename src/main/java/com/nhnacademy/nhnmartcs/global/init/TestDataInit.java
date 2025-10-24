@@ -15,6 +15,10 @@ public class TestDataInit {
 
     private final UserRepository userRepository;
 
+    /**
+     * Inserts initial test users into the repository: a Customer (loginId "c1234", name "고객1")
+     * and a CSAdmin (loginId "a1234", name "관리자1").
+     */
     @PostConstruct
     public void init() {
         log.info("테스트 데이터 주입 시작");
