@@ -27,6 +27,12 @@ public class LoginController {
     }
 
 
+    /**
+     * Authenticate credentials, store the authenticated user in the HTTP session, and redirect according to the user's role.
+     *
+     * @param loginRequest object containing the login identifier and password used to authenticate the user
+     * @return `"redirect:/cs"` if the authenticated user is a Customer, `"redirect:/cs/admin"` if the authenticated user is a CSAdmin, otherwise `"redirect:/"`
+     */
     @PostMapping("/cs/login")
     public String doLogin(LoginRequest loginRequest, HttpServletRequest request){
         User loginUser = userService.doLogin(

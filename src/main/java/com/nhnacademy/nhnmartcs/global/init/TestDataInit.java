@@ -22,6 +22,13 @@ public class TestDataInit {
     private final UserRepository userRepository;
     private final InquiryRepository inquiryRepository;
 
+    /**
+     * Populates the database with sample user accounts and a test inquiry for development/testing.
+     *
+     * Creates and persists a Customer (loginId "c1234"), a CSAdmin (loginId "a1234"), and an
+     * Inquiry (subject "배송이 너무 늦어요", category COMPLAINT, timestamp set to one day ago)
+     * to the configured repositories.
+     */
     @PostConstruct
     public void init() {
         log.info("테스트 데이터 주입 시작");

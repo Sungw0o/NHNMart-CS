@@ -36,6 +36,12 @@ public class InquiryDetailResponse {
 
     }
 
+    /**
+     * Create an InquiryDetailResponse DTO populated from an Inquiry entity.
+     *
+     * @param inquiry the source Inquiry entity to map; may be null
+     * @return an InquiryDetailResponse populated with inquiry fields, answer details, and mapped attachments; `null` if {@code inquiry} is null
+     */
     public static InquiryDetailResponse fromEntity(Inquiry inquiry) {
         if (inquiry == null) {
             return null;

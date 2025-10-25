@@ -29,7 +29,16 @@ import java.util.stream.Collectors;
 public class InquiryServiceImpl implements InquiryService {
 
     private final InquiryRepository inquiryRepository;
-    // private final AttachmentService attachmentService; // 파일 첨부 시 주입
+    /**
+     * Create and persist a new inquiry for the given customer.
+     *
+     * Constructs an Inquiry from the provided request data, saves it to the repository,
+     * and returns the saved inquiry's identifier.
+     *
+     * @param customer   the customer who created the inquiry
+     * @param requestDto request data containing the inquiry title, content, and category
+     * @return the generated inquiry ID
+     */
 
     @Override
     public Long createInquiry(Customer customer, InquiryCreateRequest requestDto) {
@@ -50,6 +59,16 @@ public class InquiryServiceImpl implements InquiryService {
         return savedInquiry.getInquiryId();
     }
 
+    /**
+     * Retrieve the given customer's inquiries, optionally filtered by category.
+     *
+     * <p>If a category name is provided, it is matched case-insensitively to an InquiryCategory.
+     * If the provided category name does not correspond to any enum value, an empty list is returned.</p>
+     *
+     * @param customer the customer whose inquiries to fetch
+     * @param category optional category name (case-insensitive); may be null or empty to fetch all categories
+     * @return a list of InquirySummaryResponse objects for the customer's inquiries, ordered by creation time descending; empty if no matching inquiries or if an invalid category name was provided
+     */
     @Override
     public List<InquirySummaryResponse> getMyInquiries(Customer customer, String category) {
         List<Inquiry> inquiries;
@@ -69,6 +88,15 @@ public class InquiryServiceImpl implements InquiryService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Retrieve detailed information for an inquiry if the given customer owns it.
+     *
+     * @param inquiryId the identifier of the inquiry to retrieve
+     * @param customer  the customer requesting the inquiry; used to verify ownership
+     * @return the inquiry details as an {@code InquiryDetailResponse}
+     * @throws InquiryNotFoundException    if no inquiry exists with the given id
+     * @throws InquiryAccessDeniedException if the requesting customer does not own the inquiry
+     */
     @Override
     public InquiryDetailResponse getInquiryDetail(Long inquiryId, Customer customer) {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
@@ -80,6 +108,11 @@ public class InquiryServiceImpl implements InquiryService {
         return InquiryDetailResponse.fromEntity(inquiry);
     }
 
+    /**
+     * Retrieves all inquiries that have not been answered, ordered by creation time ascending, for administrative overview.
+     *
+     * @return a list of AdminInquirySummaryResponse representing unanswered inquiries ordered by creation time (oldest first)
+     */
     @Override
     public List<AdminInquirySummaryResponse> getUnansweredInquiries() {
         List<Inquiry> inquiries = inquiryRepository.findUnansweredInquiriesOrderByCreatedAtAsc();
@@ -90,7 +123,11 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     /**
-     * 🔽 2. [구현] 관리자용 문의 상세 조회 (권한 체크 없음)
+     * Retrieve detailed information for a specific inquiry for administrative viewing.
+     *
+     * @param inquiryId the ID of the inquiry to retrieve
+     * @return an InquiryDetailResponse representing the inquiry
+     * @throws InquiryNotFoundException if no inquiry exists with the given ID
      */
     @Override
     public InquiryDetailResponse getInquiryDetailForAdmin(Long inquiryId) {
@@ -101,7 +138,12 @@ public class InquiryServiceImpl implements InquiryService {
     }
 
     /**
-     * 🔽 3. [구현] 답변 등록
+     * Add an answer to an existing inquiry on behalf of a customer support admin.
+     *
+     * @param inquiryId     the ID of the inquiry to which the answer will be added
+     * @param answerContent the text content of the answer
+     * @param admin         the admin creating the answer
+     * @throws InquiryNotFoundException if no inquiry exists with the given ID
      */
     @Override
     public void addAnswer(Long inquiryId, String answerContent, CSAdmin admin) {

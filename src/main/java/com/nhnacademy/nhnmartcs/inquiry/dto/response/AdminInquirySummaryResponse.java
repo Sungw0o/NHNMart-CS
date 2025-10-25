@@ -15,6 +15,12 @@ public class AdminInquirySummaryResponse {
     private String authorName;
     private String createdAt;
 
+    /**
+     * Create an AdminInquirySummaryResponse from an Inquiry entity.
+     *
+     * @param inquiry the source Inquiry to map from; may be {@code null}
+     * @return the DTO populated from the inquiry, or {@code null} if {@code inquiry} is {@code null}
+     */
     public static AdminInquirySummaryResponse fromEntity(Inquiry inquiry) {
         if (inquiry == null) {
             return null;
