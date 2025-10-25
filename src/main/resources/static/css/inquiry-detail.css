@@ -1,0 +1,69 @@
+body {
+    font-family: sans-serif;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.inquiry-info dt,
+.answer-info dt {
+    font-weight: bold;
+    width: 100px;
+    float: left;
+    clear: left;
+}
+
+.inquiry-info dd,
+.answer-info dd {
+    margin-left: 110px;
+    margin-bottom: 10px;
+}
+
+.inquiry-content,
+.answer-content {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px dashed #eee;
+    white-space: pre-wrap;
+    /* 줄바꿈 유지 */
+}
+
+.status-answered {
+    color: green;
+    font-weight: bold;
+}
+
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.answer-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #007bff;
+}
+
+.back-link {
+    display: inline-block;
+    margin-top: 20px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}

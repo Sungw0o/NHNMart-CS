@@ -1,0 +1,100 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+    color: #495057;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* float 해제를 위한 clearfix */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+h1 {
+    color: #343a40;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0; /* h1 상단 마진 제거 */
+}
+
+h2 {
+    color: #495057;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.welcome-msg {
+    margin-bottom: 1rem;
+    color: #6c757d;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem; /* 테이블 상단 간격 */
+}
+
+th, td {
+    border: 1px solid #dee2e6;
+    padding: 10px 12px; /* 패딩 조정 */
+    text-align: left;
+    vertical-align: middle; /* 세로 정렬 */
+}
+
+th {
+    background-color: #e9ecef; /* 헤더 배경색 변경 */
+    font-weight: 600; /* 헤더 글꼴 두께 */
+}
+
+/* 테이블 행 번갈아 배경색 적용 */
+tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* 데이터 없을 때 메시지 스타일 */
+td.no-data {
+    text-align: center;
+    color: #6c757d;
+    padding: 20px;
+}
+
+/* 링크 스타일 */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    float: right; /* 오른쪽 정렬 */
+    margin-bottom: 1rem; /* 아래쪽 간격 */
+}
+.logout-btn:hover {
+    background-color: #5a6268;
+    text-decoration: none; /* 호버 시 밑줄 제거 */
+    color: white;
+}

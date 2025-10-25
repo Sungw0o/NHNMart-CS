@@ -1,0 +1,177 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+    color: #495057;
+    margin: 0; /* body 기본 마진 제거 */
+}
+
+.container {
+    max-width: 900px;
+    margin: 2rem auto; /* 상하 마진 추가 */
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+/* float 해제를 위한 clearfix */
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+h1 {
+    color: #343a40;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    margin-top: 0; /* h1 상단 마진 제거 */
+    font-size: 1.75rem; /* 제목 크기 조정 */
+}
+
+h2 {
+    color: #495057;
+    margin-top: 2rem; /* 테이블 제목 상단 간격 */
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.welcome-msg {
+    margin-bottom: 1rem;
+    color: #6c757d;
+}
+
+.action-buttons {
+    margin-bottom: 1.5rem; /* 버튼과 검색 폼 사이 간격 */
+}
+
+.search-form {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #e9ecef;
+    border-radius: 4px;
+}
+
+.search-form label {
+    margin-right: 0.5rem;
+    font-weight: 500;
+}
+
+.search-form select {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem; /* 테이블 상단 간격 */
+}
+
+th, td {
+    border: 1px solid #dee2e6;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+th {
+    background-color: #e9ecef;
+    font-weight: 600;
+}
+
+/* 테이블 행 번갈아 배경색 적용 (선택 사항) */
+/* tr:nth-child(even) {
+    background-color: #f8f9fa;
+} */
+
+/* 데이터 없을 때 메시지 스타일 */
+td.no-data {
+    text-align: center;
+    color: #6c757d;
+    padding: 20px;
+}
+
+/* 링크 스타일 */
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* 버튼 공통 스타일 */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+.btn-primary:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+.btn-secondary:hover {
+    background-color: #5a6268;
+    color: white;
+    text-decoration: none;
+}
+
+/* 로그아웃 버튼 스타일 */
+.logout-btn {
+    display: inline-block; /* 수정: float 대신 inline-block */
+    padding: 0.5rem 1rem;
+    background-color: #dc3545; /* 빨간색 계열 */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    float: right; /* 오른쪽 정렬 유지 */
+    margin-left: 1rem; /* 다른 요소와 간격 */
+    margin-bottom: 1rem; /* 추가: 아래 요소와 간격 */
+}
+.logout-btn:hover {
+    background-color: #c82333;
+    text-decoration: none;
+    color: white;
+}
+
+/* 답변 상태 스타일 */
+.status {
+    font-weight: bold;
+    padding: 0.2em 0.5em;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+.status.answered {
+    background-color: #d4edda; /* 연한 초록 */
+    color: #155724;
+}
+.status.pending {
+    background-color: #fff3cd; /* 연한 노랑 */
+    color: #856404;
+}
+

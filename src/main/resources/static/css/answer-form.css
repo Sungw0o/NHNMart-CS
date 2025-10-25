@@ -1,0 +1,9 @@
+/* 템플릿 상단 에러 배너 스타일 */
+.error-banner {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px; /* 패딩 조정 */
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
