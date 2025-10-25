@@ -18,7 +18,8 @@
             <dd th:text="*{category}">분류</dd>
 
             <dt>작성일시:</dt>
-            <dd th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd HH:mm')}">작성일시</dd>
+            <!-- ✅ 수정: 이미 포맷된 문자열을 그대로 출력 -->
+            <dd th:text="*{createdAt}">작성일시</dd>
 
             <dt>답변 상태:</dt>
             <dd>
@@ -33,13 +34,14 @@
         <p th:text="*{content}">문의 본문 내용입니다.</p>
     </div>
 
-    <!-- TODO: 첨부파일 목록 표시 -->
+    <!-- 첨부파일 목록 (필요 시 활성화) -->
     <!--
     <div class="attachments" th:if="*{!#lists.isEmpty(attachments)}">
         <h3>첨부파일</h3>
         <ul>
             <li th:each="file : *{attachments}">
-                <a th:href="@{/cs/attachments/{id}(id=${file.id})}" th:text="${file.originalFilename}"></a>
+                <a th:href="@{/cs/attachments/{id}(id=${file.id})}"
+                   th:text="${file.originalFilename}"></a>
             </li>
         </ul>
     </div>
@@ -51,7 +53,8 @@
         <div class="answer-info">
             <dl>
                 <dt>답변 일시:</dt>
-                <dd th:text="${#temporals.format(inquiry.answerCreatedAt, 'yyyy-MM-dd HH:mm')}">답변일시</dd>
+                <!-- ✅ 수정: 이미 포맷된 문자열을 그대로 출력 -->
+                <dd th:text="*{answerCreatedAt}">답변일시</dd>
 
                 <dt>답변 담당자:</dt>
                 <dd th:text="*{answerAdminName}">담당자 이름</dd>
@@ -63,8 +66,6 @@
     </div>
 
     <a th:href="@{/cs}" class="back-link">← 목록으로 돌아가기</a>
-
 </div>
 </body>
 </html>
-

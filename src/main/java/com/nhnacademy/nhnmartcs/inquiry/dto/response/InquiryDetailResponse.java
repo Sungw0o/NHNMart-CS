@@ -19,7 +19,7 @@ public class InquiryDetailResponse {
     private String title;
     private String category;
     private String content;
-    private String inquiryCreatedAt;
+    private String createdAt;
 
     private boolean answered;
     private String answerContent;
@@ -58,7 +58,7 @@ public class InquiryDetailResponse {
                 .title(inquiry.getTitle())
                 .category(inquiry.getCategory().getDescription())
                 .content(inquiry.getContent())
-                .inquiryCreatedAt(inquiry.getCreatedAt().format(formatter))
+                .createdAt(inquiry.getCreatedAt().format(formatter))
                 .answered(answer != null)
                 .answerContent(answer != null ? answer.getContent() : null)
                 .answerCreatedAt(answer != null ? answer.getCreatedAt().format(formatter) : null)

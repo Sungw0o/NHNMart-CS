@@ -39,18 +39,37 @@ textarea {
 
 .btn {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 0.5rem 1rem; /* 패딩 수정 */
+    font-size: 0.9rem; /* 폰트 크기 추가 */
+    font-weight: 500; /* 폰트 굵기 추가 */
+    text-align: center; /* 텍스트 정렬 추가 */
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s ease-in-out;
+
     background-color: #007bff;
     color: white;
-    border-radius: 4px;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
+
     margin-right: 10px;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
 }
 
 .btn-secondary {
     background-color: #6c757d;
+    color: white; /* color 속성 추가 */
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+    color: white;
+    text-decoration: none;
 }
 
 .error {

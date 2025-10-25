@@ -1,6 +1,5 @@
 /* 템플릿 상단 에러 배너 스타일 */
 .error-banner {
-    /* login.css의 .error-message 스타일 참조 */
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;

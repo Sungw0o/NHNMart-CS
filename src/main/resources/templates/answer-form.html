@@ -5,18 +5,17 @@
     <title>답변 작성 - NHN Mart 고객센터</title>
 
     <link rel="stylesheet" th:href="@{/css/inquiry-detail.css}">
-
     <link rel="stylesheet" th:href="@{/css/inquiry-form.css}">
-
     <link rel="stylesheet" th:href="@{/css/answer-form.css}">
-
 </head>
 <body>
 <div class="container" th:object="${inquiry}">
     <h1>답변 작성</h1>
 
+    <!-- 오류 메시지 -->
     <div th:if="${errorMessage}" class="error-banner" th:text="${errorMessage}"></div>
 
+    <!-- 문의 기본 정보 -->
     <div class="inquiry-info">
         <dl>
             <dt>제목:</dt>
@@ -26,34 +25,49 @@
             <dd th:text="*{category}">분류</dd>
 
             <dt>작성일시:</dt>
-            <dd th:text="*{inquiryCreatedAt}">작성일시</dd>
+            <dd th:text="*{createdAt}">작성일시</dd>
         </dl>
     </div>
 
+    <!-- 문의 내용 -->
     <div class="inquiry-content">
         <h2>문의 내용</h2>
         <p th:text="*{content}">문의 본문 내용입니다.</p>
     </div>
 
+    <!-- 첨부파일 -->
+    <div class="attachments" th:if="*{!#lists.isEmpty(attachments)}">
+        <h3>첨부파일</h3>
+        <ul>
+            <li th:each="file : *{attachments}">
+                <a th:href="@{/cs/attachments/{id}(id=${file.id})}"
+                   th:text="${file.originalFilename}"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 답변 작성 폼 -->
     <div class="answer-section">
         <h2>답변 작성란</h2>
 
-        <form th:action="@{/cs/admin/answer(inquiryId=*{inquiryId})}"
+        <form th:action="@{/cs/admin/answer(inquiryId=${inquiry.inquiryId})}"
               method="post"
-              th:object="${answerRequest}"> <div class="form-group"> <label for="content" style="font-weight: bold;">답변 내용:</label>
-            <textarea id="content" th:field="*{content}" th:errorclass="field-error"></textarea>
+              th:object="${answerRequest}">
 
-            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error">답변 내용 에러</div>
-        </div>
+            <div class="form-group">
+                <label for="content" style="font-weight: bold;">답변 내용:</label>
+                <textarea id="content" th:field="*{content}" th:errorclass="field-error"></textarea>
 
-            <div>
+                <div th:if="${#fields.hasErrors('content')}"
+                     th:errors="*{content}" class="error">답변 내용 에러</div>
+            </div>
+
+            <div class="button-group">
                 <button type="submit" class="btn">답변 등록</button>
-
                 <a th:href="@{/cs/admin}" class="btn btn-secondary">취소 (목록으로)</a>
             </div>
         </form>
     </div>
-
 </div>
 </body>
 </html>
