@@ -109,11 +109,6 @@ public class InquiryServiceImpl implements InquiryService {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new InquiryNotFoundException("답변할 문의를 찾을 수 없습니다. ID: " + inquiryId));
 
-        if (inquiry.getAnswer() != null) {
-            // 기획에 따라 덮어쓰거나, 예외를 발생시킬 수 있습니다.
-            log.warn("Inquiry ID: {} already has an answer. It will be overwritten.", inquiryId);
-        }
-
         // 2. Answer 객체 생성 (Answer.java 생성자 활용)
         Answer newAnswer = new Answer(answerContent, admin);
 
