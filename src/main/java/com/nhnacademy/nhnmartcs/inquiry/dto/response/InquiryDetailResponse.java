@@ -1,4 +1,4 @@
-package com.nhnacademy.nhnmartcs.inquiry.dto;
+package com.nhnacademy.nhnmartcs.inquiry.dto.response;
 
 import com.nhnacademy.nhnmartcs.attachment.domain.Attachment;
 import com.nhnacademy.nhnmartcs.inquiry.domain.Answer;
@@ -15,13 +15,11 @@ import java.util.stream.Collectors;
 @Builder
 public class InquiryDetailResponse {
 
-
     private Long inquiryId;
     private String title;
     private String category;
     private String content;
     private String inquiryCreatedAt;
-
 
     private boolean answered;
     private String answerContent;
@@ -37,7 +35,6 @@ public class InquiryDetailResponse {
         private String originalFilename;
 
     }
-
 
     public static InquiryDetailResponse fromEntity(Inquiry inquiry) {
         if (inquiry == null) {

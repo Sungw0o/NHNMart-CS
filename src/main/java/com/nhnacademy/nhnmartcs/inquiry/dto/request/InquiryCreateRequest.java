@@ -1,4 +1,4 @@
-package com.nhnacademy.nhnmartcs.inquiry.dto;
+package com.nhnacademy.nhnmartcs.inquiry.dto.request;
 
 import com.nhnacademy.nhnmartcs.inquiry.domain.InquiryCategory;
 import jakarta.validation.constraints.NotBlank;

@@ -2,15 +2,19 @@ package com.nhnacademy.nhnmartcs.inquiry.service.impl;
 
 import com.nhnacademy.nhnmartcs.global.exception.InquiryAccessDeniedException;
 import com.nhnacademy.nhnmartcs.global.exception.InquiryNotFoundException;
+import com.nhnacademy.nhnmartcs.inquiry.domain.Answer;
 import com.nhnacademy.nhnmartcs.inquiry.domain.Inquiry;
 import com.nhnacademy.nhnmartcs.inquiry.domain.InquiryCategory;
-import com.nhnacademy.nhnmartcs.inquiry.dto.InquiryCreateRequest;
-import com.nhnacademy.nhnmartcs.inquiry.dto.InquiryDetailResponse;
-import com.nhnacademy.nhnmartcs.inquiry.dto.InquirySummaryResponse;
+import com.nhnacademy.nhnmartcs.inquiry.dto.request.InquiryCreateRequest;
+import com.nhnacademy.nhnmartcs.inquiry.dto.response.AdminInquirySummaryResponse;
+import com.nhnacademy.nhnmartcs.inquiry.dto.response.InquiryDetailResponse;
+import com.nhnacademy.nhnmartcs.inquiry.dto.response.InquirySummaryResponse;
 import com.nhnacademy.nhnmartcs.inquiry.repository.InquiryRepository;
 import com.nhnacademy.nhnmartcs.inquiry.service.InquiryService;
+import com.nhnacademy.nhnmartcs.user.domain.CSAdmin;
 import com.nhnacademy.nhnmartcs.user.domain.Customer;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -19,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InquiryServiceImpl implements InquiryService {
@@ -73,5 +78,51 @@ public class InquiryServiceImpl implements InquiryService {
         }
 
         return InquiryDetailResponse.fromEntity(inquiry);
+    }
+
+    @Override
+    public List<AdminInquirySummaryResponse> getUnansweredInquiries() {
+        List<Inquiry> inquiries = inquiryRepository.findUnansweredInquiriesOrderByCreatedAtAsc();
+
+        return inquiries.stream()
+                .map(AdminInquirySummaryResponse::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 🔽 2. [구현] 관리자용 문의 상세 조회 (권한 체크 없음)
+     */
+    @Override
+    public InquiryDetailResponse getInquiryDetailForAdmin(Long inquiryId) {
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new InquiryNotFoundException("해당 문의를 찾을 수 없습니다. ID: " + inquiryId));
+
+        return InquiryDetailResponse.fromEntity(inquiry);
+    }
+
+    /**
+     * 🔽 3. [구현] 답변 등록
+     */
+    @Override
+    public void addAnswer(Long inquiryId, String answerContent, CSAdmin admin) {
+        // 1. 답변할 원본 문의 조회
+        Inquiry inquiry = inquiryRepository.findById(inquiryId)
+                .orElseThrow(() -> new InquiryNotFoundException("답변할 문의를 찾을 수 없습니다. ID: " + inquiryId));
+
+        if (inquiry.getAnswer() != null) {
+            // 기획에 따라 덮어쓰거나, 예외를 발생시킬 수 있습니다.
+            log.warn("Inquiry ID: {} already has an answer. It will be overwritten.", inquiryId);
+        }
+
+        // 2. Answer 객체 생성 (Answer.java 생성자 활용)
+        Answer newAnswer = new Answer(answerContent, admin);
+
+        // 3. Inquiry 객체에 답변 추가 (Inquiry.java 메서드 활용)
+        inquiry.addAnswer(newAnswer);
+
+        // 4. Map 저장소는 덮어쓰기(update)를 지원하므로 save 호출
+        inquiryRepository.save(inquiry);
+
+        log.info("Answer added successfully by admin: {} to inquiry ID: {}", admin.getLoginId(), inquiryId);
     }
 }

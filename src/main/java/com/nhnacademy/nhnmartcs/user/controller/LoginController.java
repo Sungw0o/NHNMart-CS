@@ -38,9 +38,9 @@ public class LoginController {
         session.setAttribute("loginUser", loginUser);
 
         if (loginUser instanceof Customer) {
-            return "inquiry-list";
+            return "redirect:/cs";
         } else if (loginUser instanceof CSAdmin) {
-            return "admin";
+            return "redirect:/cs/admin";
         }
         return "redirect:/";
     }

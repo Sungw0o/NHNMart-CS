@@ -13,4 +13,5 @@ public interface InquiryRepository {
     Optional<Inquiry> findById(Long inquiryId);
     List<Inquiry> findByCustomerOrderByCreatedAtDesc(Customer customer);
     List<Inquiry> findByCustomerAndCategoryOrderByCreatedAtDesc(Customer customer, InquiryCategory category);
+    List<Inquiry> findUnansweredInquiriesOrderByCreatedAtAsc();
 }

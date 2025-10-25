@@ -1,4 +1,4 @@
-package com.nhnacademy.nhnmartcs.inquiry.dto;
+package com.nhnacademy.nhnmartcs.inquiry.dto.response;
 
 import com.nhnacademy.nhnmartcs.inquiry.domain.Inquiry;
 import lombok.Builder;

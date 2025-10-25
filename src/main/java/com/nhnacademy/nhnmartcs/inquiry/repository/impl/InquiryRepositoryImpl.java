@@ -49,4 +49,12 @@ public class InquiryRepositoryImpl implements InquiryRepository {
                 .sorted(Comparator.comparing(Inquiry::getCreatedAt).reversed())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<Inquiry> findUnansweredInquiriesOrderByCreatedAtAsc() {
+        return store.values().stream()
+                .filter(inquiry -> inquiry.getAnswer() == null)
+                .sorted(Comparator.comparing(Inquiry::getCreatedAt))
+                .collect(Collectors.toList());
+    }
 }

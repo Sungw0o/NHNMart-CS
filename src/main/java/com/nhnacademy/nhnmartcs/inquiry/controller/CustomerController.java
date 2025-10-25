@@ -1,9 +1,9 @@
 package com.nhnacademy.nhnmartcs.inquiry.controller;
 
 import com.nhnacademy.nhnmartcs.inquiry.domain.InquiryCategory;
-import com.nhnacademy.nhnmartcs.inquiry.dto.InquiryCreateRequest;
-import com.nhnacademy.nhnmartcs.inquiry.dto.InquiryDetailResponse;
-import com.nhnacademy.nhnmartcs.inquiry.dto.InquirySummaryResponse;
+import com.nhnacademy.nhnmartcs.inquiry.dto.request.InquiryCreateRequest;
+import com.nhnacademy.nhnmartcs.inquiry.dto.response.InquiryDetailResponse;
+import com.nhnacademy.nhnmartcs.inquiry.dto.response.InquirySummaryResponse;
 import com.nhnacademy.nhnmartcs.inquiry.service.InquiryService;
 import com.nhnacademy.nhnmartcs.user.domain.Customer;
 import jakarta.servlet.http.HttpSession;
