@@ -32,9 +32,12 @@ public class AdminController {
     private final InquiryService inquiryService;
 
     /**
-     * 1. 관리자 대시보드 (답변 대기 문의 목록)
-     * GET /cs/admin
-     */
+         * Display the admin dashboard showing inquiries that are awaiting answers.
+         *
+         * @param session the HTTP session expected to contain the current user under attribute "loginUser"; access is allowed only if that user is a CSAdmin
+         * @param model   the MVC model to which the unanswered inquiries list is added under attribute "inquiries"
+         * @return        the view name "admin" when an authenticated CSAdmin is present; otherwise a redirect string to "/cs/login"
+         */
     @GetMapping
     public String viewAdminDashboard(HttpSession session, Model model) {
         log.info("GET /cs/admin request received.");
@@ -54,9 +57,11 @@ public class AdminController {
     }
 
     /**
-     * 2. 답변 작성 폼
-     * GET /cs/admin/answer?inquiryId=...
-     */
+         * Display the answer creation form for a specific inquiry to an authenticated CS admin.
+         *
+         * @param inquiryId the identifier of the inquiry to display
+         * @return the view name for the answer form ("answer-form"), or a redirect to the CS admin login when the session is missing or the user is not an admin
+         */
     @GetMapping("/answer")
     public String answerForm(@RequestParam("inquiryId") Long inquiryId,
                              HttpSession session,
@@ -80,8 +85,19 @@ public class AdminController {
     }
 
     /**
-     * 3. 답변 등록 처리
-     * POST /cs/admin/answer?inquiryId=...
+     * Handle submission of an admin answer for a specific inquiry.
+     *
+     * @param inquiryId         the identifier of the inquiry being answered
+     * @param answerRequest     the request object containing the answer content
+     * @param bindingResult     validation results for the answerRequest
+     * @param session           HTTP session used to retrieve the logged-in admin
+     * @param model             model used to populate view attributes when returning a view
+     * @param redirectAttributes attributes used to add flash messages for redirects
+     * @return the view name or redirect location:
+     *         - "redirect:/cs/login" when no admin is logged in
+     *         - "admin" when validation fails
+     *         - "redirect:/cs/admin" on successful answer submission
+     *         - "redirect:/cs/admin/answer?inquiryId={inquiryId}" when an error occurs saving the answer
      */
     @PostMapping("/answer")
     public String addAnswer(@RequestParam("inquiryId") Long inquiryId,

@@ -31,6 +31,19 @@ public class CustomerController {
 
     private final InquiryService inquiryService;
 
+    /**
+     * Displays the logged-in customer's inquiries, optionally filtered by category, and prepares model attributes for the inquiry list view.
+     *
+     * Adds the following model attributes:
+     * - "inquiries": list of InquirySummaryResponse for the customer
+     * - "categories": all available InquiryCategory values
+     * - "selectedCategory": the provided category filter (may be null)
+     *
+     * @param category optional inquiry category to filter the results; may be null to show all categories
+     * @param session HTTP session used to retrieve the authenticated customer (expects "loginUser" attribute)
+     * @param model model to populate with inquiry list data and categories
+     * @return the view name "inquiry-list" when a customer is authenticated; otherwise a redirect to "/cs/login"
+     */
     @GetMapping
     public String viewMyInquiries(@RequestParam(required = false) String category,
                                   HttpSession session,
@@ -54,6 +67,12 @@ public class CustomerController {
     }
 
 
+    /**
+     * Displays the inquiry creation form, ensuring a form backing object and category list are present in the model.
+     *
+     * @param model the MVC model to receive the form backing object ("inquiryCreateRequest") and the "categories" attribute
+     * @return the view name for the inquiry creation form
+     */
     @GetMapping("/inquiry")
     public String inquiryForm(Model model) {
         log.info("GET /cs/inquiry request received.");
@@ -65,6 +84,19 @@ public class CustomerController {
         return "inquiry-form";
     }
 
+    /**
+     * Handle submission of a new inquiry form and create an inquiry for the logged-in customer.
+     *
+     * Performs validation of the provided request; if the user is not authenticated it redirects to the login page,
+     * if validation fails it re-displays the inquiry form, and on service failure it sets a flash error message and
+     * redirects back to the inquiry form. On successful creation it redirects to the customer inquiry list.
+     *
+     * @param inquiryCreateRequest the form data for creating an inquiry
+     * @param bindingResult        validation results for the form data
+     * @return                     the view name to render or redirect instruction:
+     *                             redirects to "/cs/login" if unauthenticated, returns "inquiry-form" when validation fails,
+     *                             redirects to "/cs/inquiry" on creation error, and redirects to "/cs" on success
+     */
     @PostMapping("/inquiry")
     public String createInquiry(@Valid @ModelAttribute InquiryCreateRequest inquiryCreateRequest,
                                 BindingResult bindingResult,
@@ -109,6 +141,15 @@ public class CustomerController {
         return "redirect:/cs";
     }
 
+    /**
+     * Displays the detail view for a customer's inquiry identified by the given id.
+     *
+     * If the customer is not logged in, the request will be redirected to the customer login page.
+     * On success, the inquiry detail is added to the model under the attribute name "inquiry".
+     *
+     * @param id the identifier of the inquiry to display
+     * @return the view name for the inquiry detail page or a redirect to the login page
+     */
     @GetMapping("/inquiry/{id}")
     public String viewInquiryDetail(@PathVariable Long id,
                                     HttpSession session,
@@ -124,4 +165,3 @@ public class CustomerController {
     }
 
 }
-

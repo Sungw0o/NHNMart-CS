@@ -16,6 +16,14 @@ public class InquirySummaryResponse {
     private String createdAt;
     private boolean answered;
 
+    /**
+     * Create an InquirySummaryResponse DTO from an Inquiry entity.
+     *
+     * Maps id, title, category description, createdAt formatted as ISO_LOCAL_DATE, and answered (true when the inquiry has an answer).
+     *
+     * @param inquiry the source Inquiry entity; may be null
+     * @return the mapped InquirySummaryResponse, or null if {@code inquiry} is null
+     */
     public static InquirySummaryResponse fromEntity(Inquiry inquiry) {
         if (inquiry == null) {
             return null;
