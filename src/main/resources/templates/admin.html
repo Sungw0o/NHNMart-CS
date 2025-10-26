@@ -2,37 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>CS 관리자 페이지</title>
-    <style>
-        /* 간단한 로그아웃 버튼 스타일 */
-        .logout-btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.5rem 1rem;
-            background-color: #6c757d; /* 회색 계열 */
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 0.9em;
-        }
-        .logout-btn:hover {
-            background-color: #5a6268;
-        }
-    </style>
+    <title>CS 관리자 페이지 - 미답변 문의</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
 <body>
-<h1>관리자 페이지 입니다</h1>
+<div class="container clearfix">
+    <a th:href="@{/cs/logout}" class="logout-btn">로그아웃</a>
 
-<!-- 로그인한 관리자 이름 표시 (예시) -->
-<div th:if="${session.loginUser}">
-    <p><strong th:text="${session.loginUser.name}">관리자</strong>님, 환영합니다.</p>
+    <h1>관리자 페이지 - 답변 대기 문의</h1>
+    <div th:if="${session.loginUser}" class="welcome-msg">
+        <p><strong th:text="${session.loginUser.name}">관리자</strong>님, 환영합니다.</p>
+    </div>
+
+
+    <!-- 미답변 문의 목록 테이블 -->
+    <h2>답변 대기 문의 목록</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>문의 ID</th>
+            <th>제목</th>
+            <th>분류</th>
+            <th>작성자</th>
+            <th>작성일시</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- inquiries가 비어있을 경우 메시지 표시 -->
+        <tr th:if="${#lists.isEmpty(inquiries)}">
+            <td colspan="5" class="no-data">답변 대기 중인 문의가 없습니다.</td>
+        </tr>
+        <!-- inquiries 리스트 반복 출력 -->
+        <tr th:each="inquiry : ${inquiries}">
+            <td th:text="${inquiry.id}">1</td>
+            <td>
+                <!-- 제목을 클릭하면 답변 페이지로 이동 (나중에 구현될 /cs/admin/answer 경로) -->
+                <a th:href="@{/cs/admin/answer(inquiryId=${inquiry.id})}" th:text="${inquiry.title}">문의 제목</a>
+            </td>
+            <td th:text="${inquiry.category}">분류</td>
+            <td th:text="${inquiry.authorName}">작성자</td>
+            <td th:text="${inquiry.createdAt}">2025-10-24 14:00</td>
+        </tr>
+        </tbody>
+    </table>
+
 </div>
-
-<!-- 로그아웃 링크 추가 -->
-<a th:href="@{/cs/logout}" class="logout-btn">로그아웃</a>
-
-<!--
-  나중에 이 페이지에 '답변이 달리지 않은' 고객 문의 목록이 표시됩니다.
--->
 </body>
 </html>
+

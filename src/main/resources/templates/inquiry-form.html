@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>문의하기 - NHN Mart 고객센터</title>
+    <link rel="stylesheet" th:href="@{/css/inquiry-form.css}">
+</head>
+<body>
+<div class="form-container">
+    <h1>문의하기</h1>
+
+    <!-- 서버 측 에러 메시지 표시 (파일 타입 등) -->
+    <div th:if="${errorMessage}" class="error" style="background-color: #f8d7da; padding: 10px; border-radius: 4px; margin-bottom: 15px;"
+         th:text="${errorMessage}"></div>
+
+    <!-- enctype="multipart/form-data" : 파일 업로드를 위해 필수 -->
+    <form th:action="@{/cs/inquiry}" method="post" th:object="${inquiryCreateRequest}" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label for="title">제목</label>
+            <input type="text" id="title" th:field="*{title}" th:errorclass="field-error" />
+            <!-- 제목 유효성 검사 에러 메시지 -->
+            <div th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="error">제목 에러</div>
+        </div>
+
+        <div class="form-group">
+            <label for="category">분류</label>
+            <select id="category" th:field="*{category}" th:errorclass="field-error">
+                <option value="">-- 분류 선택 --</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat}"
+                        th:text="${cat.description}">카테고리</option>
+            </select>
+            <!-- 분류 유효성 검사 에러 메시지 -->
+            <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}" class="error">분류 에러</div>
+        </div>
+
+        <div class="form-group">
+            <label for="content">본문</label>
+            <textarea id="content" th:field="*{content}" th:errorclass="field-error"></textarea>
+            <!-- 본문 유효성 검사 에러 메시지 -->
+            <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="error">본문 에러</div>
+        </div>
+
+        <!-- 파일 첨부 (지금은 기능 비활성화, UI만) -->
+        <!--
+        <div class="form-group">
+            <label for="files">첨부파일 (이미지만 가능)</label>
+            <input type="file" id="files" name="files" multiple accept="image/gif, image/jpeg, image/png">
+        </div>
+        -->
+
+        <div>
+            <button type="submit" class="btn">확인</button>
+            <a th:href="@{/cs}" class="btn btn-secondary">취소</a>
+        </div>
+
+    </form>
+</div>
+</body>
+</html>
+
