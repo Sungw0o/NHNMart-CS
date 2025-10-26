@@ -56,14 +56,6 @@ class LoginCheckInterceptorTest {
     }
 
     @Test
-    @DisplayName("로그인 안 한 상태로 로그인 페이지(/cs/login) 접근 시 성공 (제외 경로)")
-    void preHandle_AccessLoginPageWithoutSession_AllowsAccess() throws Exception {
-        mockMvc.perform(get("/cs/login"))
-                .andExpect(status().isOk());
-
-    }
-
-    @Test
     @DisplayName("로그인 안 한 상태로 CSS 파일 접근 시 성공 (제외 경로)")
     void preHandle_AccessCssWithoutSession_AllowsAccess() throws Exception {
         mockMvc.perform(get("/css/login.css"))

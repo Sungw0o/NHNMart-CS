@@ -2,6 +2,7 @@ package com.nhnacademy.nhnmartcs.inquiry.service.impl;
 
 import com.nhnacademy.nhnmartcs.global.exception.InquiryAccessDeniedException;
 import com.nhnacademy.nhnmartcs.global.exception.InquiryNotFoundException;
+import com.nhnacademy.nhnmartcs.global.exception.InvalidFileTypeException;
 import com.nhnacademy.nhnmartcs.inquiry.domain.Answer;
 import com.nhnacademy.nhnmartcs.inquiry.domain.Inquiry;
 import com.nhnacademy.nhnmartcs.inquiry.domain.InquiryCategory;
@@ -14,26 +15,71 @@ import com.nhnacademy.nhnmartcs.inquiry.service.InquiryService;
 import com.nhnacademy.nhnmartcs.user.domain.CSAdmin;
 import com.nhnacademy.nhnmartcs.user.domain.Customer;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j; // 제거
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InquiryServiceImpl implements InquiryService {
 
     private final InquiryRepository inquiryRepository;
-    // private final AttachmentService attachmentService; // 파일 첨부 시 주입
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
+
+    private static final List<String> ALLOWED_IMAGE_TYPES = List.of("image/gif", "image/jpeg", "image/png");
 
     @Override
-    public Long createInquiry(Customer customer, InquiryCreateRequest requestDto) {
-        // List<Attachment> savedAttachments = attachmentService.saveFiles(files);
+    public Long createInquiry(Customer customer, InquiryCreateRequest requestDto, List<MultipartFile> files) {
+
+        List<Inquiry.FileInfo> savedFileInfos = new ArrayList<>();
+        Path uploadPath = Paths.get(uploadDir);
+
+        try {
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            if (files != null) {
+                for (MultipartFile file : files) {
+                    if (file.isEmpty()) continue;
+
+                    String contentType = file.getContentType();
+                    if (contentType == null || !ALLOWED_IMAGE_TYPES.contains(contentType)) {
+                        throw new InvalidFileTypeException("이미지 파일(GIF, JPG, PNG)만 업로드 가능합니다.");
+                    }
+
+                    String originalFilename = StringUtils.cleanPath(file.getOriginalFilename());
+                    String savedFilename = UUID.randomUUID() + "_" + originalFilename;
+                    Path targetLocation = uploadPath.resolve(savedFilename);
+
+                    Files.copy(file.getInputStream(), targetLocation);
+
+                    Inquiry.FileInfo fileInfo = new Inquiry.FileInfo(
+                            originalFilename,
+                            savedFilename,
+                            targetLocation.toString()
+                    );
+                    savedFileInfos.add(fileInfo);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("파일 처리 중 오류가 발생했습니다.", e);
+        }
 
         Inquiry inquiry = new Inquiry(
                 null,
@@ -43,7 +89,7 @@ public class InquiryServiceImpl implements InquiryService {
                 LocalDateTime.now(),
                 customer,
                 null,
-                Collections.emptyList()
+                savedFileInfos
         );
 
         Inquiry savedInquiry = inquiryRepository.save(inquiry);
@@ -61,7 +107,6 @@ public class InquiryServiceImpl implements InquiryService {
                 return Collections.emptyList();
             }
         } else {
-
             inquiries = inquiryRepository.findByCustomerOrderByCreatedAtDesc(customer);
         }
         return inquiries.stream()
@@ -76,48 +121,32 @@ public class InquiryServiceImpl implements InquiryService {
         if (!inquiry.getCustomer().getUserId().equals(customer.getUserId())) {
             throw new InquiryAccessDeniedException("본인의 문의만 조회할 수 있습니다.");
         }
-
         return InquiryDetailResponse.fromEntity(inquiry);
     }
 
     @Override
     public List<AdminInquirySummaryResponse> getUnansweredInquiries() {
         List<Inquiry> inquiries = inquiryRepository.findUnansweredInquiriesOrderByCreatedAtAsc();
-
         return inquiries.stream()
                 .map(AdminInquirySummaryResponse::fromEntity)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 🔽 2. [구현] 관리자용 문의 상세 조회 (권한 체크 없음)
-     */
     @Override
     public InquiryDetailResponse getInquiryDetailForAdmin(Long inquiryId) {
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new InquiryNotFoundException("해당 문의를 찾을 수 없습니다. ID: " + inquiryId));
-
         return InquiryDetailResponse.fromEntity(inquiry);
     }
 
-    /**
-     * 🔽 3. [구현] 답변 등록
-     */
     @Override
     public void addAnswer(Long inquiryId, String answerContent, CSAdmin admin) {
-        // 1. 답변할 원본 문의 조회
         Inquiry inquiry = inquiryRepository.findById(inquiryId)
                 .orElseThrow(() -> new InquiryNotFoundException("답변할 문의를 찾을 수 없습니다. ID: " + inquiryId));
 
-        // 2. Answer 객체 생성 (Answer.java 생성자 활용)
+
         Answer newAnswer = new Answer(answerContent, admin);
-
-        // 3. Inquiry 객체에 답변 추가 (Inquiry.java 메서드 활용)
         inquiry.addAnswer(newAnswer);
-
-        // 4. Map 저장소는 덮어쓰기(update)를 지원하므로 save 호출
         inquiryRepository.save(inquiry);
-
-        log.info("Answer added successfully by admin: {} to inquiry ID: {}", admin.getLoginId(), inquiryId);
     }
 }

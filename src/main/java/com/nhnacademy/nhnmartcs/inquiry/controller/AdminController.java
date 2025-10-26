@@ -31,10 +31,6 @@ public class AdminController {
 
     private final InquiryService inquiryService;
 
-    /**
-     * 1. 관리자 대시보드 (답변 대기 문의 목록)
-     * GET /cs/admin
-     */
     @GetMapping
     public String viewAdminDashboard(HttpSession session, Model model) {
         log.info("GET /cs/admin request received.");
@@ -53,10 +49,6 @@ public class AdminController {
         return "admin";
     }
 
-    /**
-     * 2. 답변 작성 폼
-     * GET /cs/admin/answer?inquiryId=...
-     */
     @GetMapping("/answer")
     public String answerForm(@RequestParam("inquiryId") Long inquiryId,
                              HttpSession session,
@@ -79,10 +71,6 @@ public class AdminController {
         return "answer-form";
     }
 
-    /**
-     * 3. 답변 등록 처리
-     * POST /cs/admin/answer?inquiryId=...
-     */
     @PostMapping("/answer")
     public String addAnswer(@RequestParam("inquiryId") Long inquiryId,
                             @Valid @ModelAttribute("answerRequest") AnswerCreateRequest answerRequest,

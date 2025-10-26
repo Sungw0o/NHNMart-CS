@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>문의 상세 내역 - NHN Mart 고객센터</title>
     <link rel="stylesheet" th:href="@{/css/inquiry-detail.css}">
+    <style> /* 간단한 스타일 추가 */
+    .attachments ul { list-style: none; padding-left: 0; }
+    .attachments li { margin-bottom: 5px; }
+    </style>
 </head>
 <body>
 <div class="container" th:object="${inquiry}">
@@ -13,14 +17,10 @@
         <dl>
             <dt>제목:</dt>
             <dd th:text="*{title}">문의 제목</dd>
-
             <dt>분류:</dt>
             <dd th:text="*{category}">분류</dd>
-
             <dt>작성일시:</dt>
-            <!-- ✅ 수정: 이미 포맷된 문자열을 그대로 출력 -->
             <dd th:text="*{createdAt}">작성일시</dd>
-
             <dt>답변 상태:</dt>
             <dd>
                 <span th:if="*{answered}" class="status-answered">답변 완료</span>
@@ -31,37 +31,33 @@
 
     <div class="inquiry-content">
         <h2>문의 내용</h2>
-        <p th:text="*{content}">문의 본문 내용입니다.</p>
+        <p th:text="*{content}" style="white-space: pre-wrap;">문의 본문 내용입니다.</p>
     </div>
 
-    <!-- 첨부파일 목록 (필요 시 활성화) -->
-    <!--
-    <div class="attachments" th:if="*{!#lists.isEmpty(attachments)}">
-        <h3>첨부파일</h3>
+    <div class="attachments" th:if="*{attachments != null and !attachments.isEmpty()}">
+        <h2>첨부파일</h2>
         <ul>
             <li th:each="file : *{attachments}">
-                <a th:href="@{/cs/attachments/{id}(id=${file.id})}"
-                   th:text="${file.originalFilename}"></a>
+                <img th:src="@{/files/{filename}(filename=${file.savedFilename})}"
+                     th:alt="${file.originalFilename}"
+                     style="max-width: 200px; max-height: 200px; margin-bottom: 10px;" />
+                <br/> <span th:text="${file.originalFilename}" style="font-size: 0.9em; color: grey;">첨부파일 이름</span>
             </li>
         </ul>
     </div>
-    -->
 
-    <!-- 답변 내용 (답변이 있을 경우에만 표시) -->
     <div th:if="*{answered}" class="answer-section">
         <h2>답변 내용</h2>
         <div class="answer-info">
             <dl>
                 <dt>답변 일시:</dt>
-                <!-- ✅ 수정: 이미 포맷된 문자열을 그대로 출력 -->
                 <dd th:text="*{answerCreatedAt}">답변일시</dd>
-
                 <dt>답변 담당자:</dt>
                 <dd th:text="*{answerAdminName}">담당자 이름</dd>
             </dl>
         </div>
         <div class="answer-content">
-            <p th:text="*{answerContent}">답변 내용입니다.</p>
+            <p th:text="*{answerContent}" style="white-space: pre-wrap;">답변 내용입니다.</p>
         </div>
     </div>
 

@@ -1,15 +1,14 @@
 package com.nhnacademy.nhnmartcs.inquiry.dto.response;
 
-import com.nhnacademy.nhnmartcs.attachment.domain.Attachment;
 import com.nhnacademy.nhnmartcs.inquiry.domain.Answer;
 import com.nhnacademy.nhnmartcs.inquiry.domain.Inquiry;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Getter
 @Builder
@@ -31,9 +30,8 @@ public class InquiryDetailResponse {
     @Getter
     @Builder
     public static class AttachmentSummary {
-        private Long id;
         private String originalFilename;
-
+        private String savedFilename;
     }
 
     public static InquiryDetailResponse fromEntity(Inquiry inquiry) {
@@ -42,12 +40,12 @@ public class InquiryDetailResponse {
         }
 
         Answer answer = inquiry.getAnswer();
-        List<Attachment> attachmentList = inquiry.getAttachments();
 
-        List<AttachmentSummary> attachmentSummaries = attachmentList.stream()
-                .map(att -> AttachmentSummary.builder()
-                        .id(att.getId())
-                        .originalFilename(att.getFilename())
+        List<Inquiry.FileInfo> fileInfoList = inquiry.getAttachedFiles() != null ? inquiry.getAttachedFiles() : Collections.emptyList();
+        List<AttachmentSummary> attachmentSummaries = fileInfoList.stream()
+                .map(fileInfo -> AttachmentSummary.builder()
+                        .originalFilename(fileInfo.getOriginalFilename())
+                        .savedFilename(fileInfo.getSavedFilename())
                         .build())
                 .collect(Collectors.toList());
 

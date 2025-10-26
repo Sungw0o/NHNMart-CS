@@ -1,6 +1,7 @@
-package com.nhnacademy.nhnmartcs.user.controller;
+package com.nhnacademy.nhnmartcs.user;
 
 import com.nhnacademy.nhnmartcs.global.exception.LoginFailedException;
+import com.nhnacademy.nhnmartcs.user.controller.LoginController;
 import com.nhnacademy.nhnmartcs.user.domain.CSAdmin;
 import com.nhnacademy.nhnmartcs.user.domain.Customer;
 import com.nhnacademy.nhnmartcs.user.service.UserService;
@@ -62,8 +63,8 @@ class LoginControllerTest {
         mockMvc.perform(post("/cs/login")
                         .param("loginId", "customer1")
                         .param("password", "1234"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("board"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/cs"))
                 .andExpect(request().sessionAttribute("loginUser", testCustomer));
     }
 
@@ -75,8 +76,8 @@ class LoginControllerTest {
         mockMvc.perform(post("/cs/login")
                         .param("loginId", "admin1")
                         .param("password", "1234"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("admin"))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/cs/admin"))
                 .andExpect(request().sessionAttribute("loginUser", testAdmin));
     }
 

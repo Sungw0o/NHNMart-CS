@@ -7,46 +7,45 @@
     <link rel="stylesheet" th:href="@{/css/inquiry-detail.css}">
     <link rel="stylesheet" th:href="@{/css/inquiry-form.css}">
     <link rel="stylesheet" th:href="@{/css/answer-form.css}">
+    <style> /* 간단한 스타일 추가 */
+    .attachments ul { list-style: none; padding-left: 0; }
+    .attachments li { margin-bottom: 5px; }
+    </style>
 </head>
 <body>
 <div class="container" th:object="${inquiry}">
     <h1>답변 작성</h1>
 
-    <!-- 오류 메시지 -->
     <div th:if="${errorMessage}" class="error-banner" th:text="${errorMessage}"></div>
 
-    <!-- 문의 기본 정보 -->
     <div class="inquiry-info">
         <dl>
             <dt>제목:</dt>
             <dd th:text="*{title}">문의 제목</dd>
-
             <dt>분류:</dt>
             <dd th:text="*{category}">분류</dd>
-
             <dt>작성일시:</dt>
             <dd th:text="*{createdAt}">작성일시</dd>
         </dl>
     </div>
 
-    <!-- 문의 내용 -->
     <div class="inquiry-content">
         <h2>문의 내용</h2>
-        <p th:text="*{content}">문의 본문 내용입니다.</p>
+        <p th:text="*{content}" style="white-space: pre-wrap;">문의 본문 내용입니다.</p>
     </div>
 
-    <!-- 첨부파일 -->
-    <div class="attachments" th:if="*{!#lists.isEmpty(attachments)}">
-        <h3>첨부파일</h3>
+    <div class="attachments" th:if="*{attachments != null and !attachments.isEmpty()}">
+        <h2>첨부파일</h2>
         <ul>
             <li th:each="file : *{attachments}">
-                <a th:href="@{/cs/attachments/{id}(id=${file.id})}"
-                   th:text="${file.originalFilename}"></a>
+                <img th:src="@{/files/{filename}(filename=${file.savedFilename})}"
+                     th:alt="${file.originalFilename}"
+                     style="max-width: 200px; max-height: 200px; margin-bottom: 10px;" />
+                <br/> <span th:text="${file.originalFilename}" style="font-size: 0.9em; color: grey;">첨부파일 이름</span>
             </li>
         </ul>
     </div>
 
-    <!-- 답변 작성 폼 -->
     <div class="answer-section">
         <h2>답변 작성란</h2>
 
@@ -57,7 +56,6 @@
             <div class="form-group">
                 <label for="content" style="font-weight: bold;">답변 내용:</label>
                 <textarea id="content" th:field="*{content}" th:errorclass="field-error"></textarea>
-
                 <div th:if="${#fields.hasErrors('content')}"
                      th:errors="*{content}" class="error">답변 내용 에러</div>
             </div>
